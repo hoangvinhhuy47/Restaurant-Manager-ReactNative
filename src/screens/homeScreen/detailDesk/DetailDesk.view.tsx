@@ -42,6 +42,12 @@ import LinearGradient from 'react-native-linear-gradient'
 import { DialogPaymentOrder } from '../../../components/modal/DialogPaymentOrder';
 import { DialogDiscountOrder } from '../../../components/modal/DialogDiscountOrder';
 import Toast from 'react-native-toast-message';
+import { DialogAddOtherFood } from '../../../components/modal/DialogAddOtherFood';
+import { DialogCustomer } from '../../../components/modal/DialogCustomer';
+import { DialogAddServiceCharge } from '../../../components/modal/DialogAddServiceCharge';
+import { DialogAddTipCharge } from '../../../components/modal/DialogAddTipCharge';
+import { DialogPrintOrder } from '../../../components/modal/DialogPrintOrder';
+import { DialogSelectPrinterOrder } from '../../../components/modal/DialogSelectPrinterOrder';
 
 const DetailDeskView = (props: any) => {
     const [Refesing, setRefesing] = useState(false)
@@ -56,6 +62,11 @@ const DetailDeskView = (props: any) => {
     const [Visible_Payment, setVisible_Payment] = useState(false);
     const [Visible_DicoundOrder, setVisible_DicoundOrder] = useState(false);
     const [Visible_QuestionCancel, setVisible_QuestionCancel] = useState(false)
+    const [Visible_AddOtherFood, setVisible_AddOtherFood] = useState(false)
+    const [Visible_Customer, setVisible_Customer] = useState(false)
+    const [Visible_AddSeviceCharge, setVisible_AddSeviceCharge] = useState(false)
+    const [Visible_AddTipCharge, setVisible_AddTipCharge] = useState(false)
+    const [Visible_SelectPrinter, setVisible_SelectPrinter] = useState(false)
     const [QuantityInput, setQuantityInput] = useState(0)
     const openMenu = () => setVisible_MenuOrder(true);
     const closeMenu = () => setVisible_MenuOrder(false);
@@ -77,13 +88,12 @@ const DetailDeskView = (props: any) => {
         setdataOrderDetail, setdataOrderList, Type, setType,
         dataGroups, setdataGroups,
         dataCommentFood, setdataCommentFood,
-        dataFoodList, setdataFoodList,
+        dataFoodList, setdataFoodList, AddServiceCharge_Logic,
         dataTableMerger, setdataTableMerger, CancelOrder_Logic,
         onAddFood_Logic, onCancelTable_Logic, onChangeQuantityFood_Logic, onCommendFood_Logic, onDisCountFood_Logic,
         onGetCommentFood_Logic, onGetMenu_Logic, onGetMenuDetail_Logic, onGetOrder_Logic, onGetTableMerger_Logic, onGetTableToMer_Logic, onMergeTable_Logic,
-        onRemoveFood_Logic, onSendToCookAll_Logic, onSendToSinge_Logic, onSplitOrder_Logic, ConnectPrinter_Logic,
-        onTakeAwayFood_onMenu, onViewTable_Logic, RequestPaymentOrder_Logic, CloseTable_Logic, ReAddHour_Logic } = DetailDesk_Logic(props)
-
+        onRemoveFood_Logic, onSendToCookAll_Logic, onSendToSinge_Logic, onSplitOrder_Logic,
+        onTakeAwayFood_onMenu, onViewTable_Logic, UpdateCustomerOrder_Logic, RequestPaymentOrder_Logic, CloseTable_Logic, ReAddHour_Logic, QuickSearchCustomer_Logic } = DetailDesk_Logic(props)
     const SendToCookonMenu = async (OrderID: string) => {
         if (!lodash.isEmpty(dataOrderDetail)) {
             await onSendToCookAll_Logic(OrderID)
@@ -118,7 +128,6 @@ const DetailDeskView = (props: any) => {
                 });
 
             }
-
         }
         else {
             Toast.show({
@@ -199,6 +208,21 @@ const DetailDeskView = (props: any) => {
     const GetDataTableMer = async (TranSacTionID: any) => {
         await onGetTableMerger_Logic(TranSacTionID);
     }
+    const onUpdateCustome = async (CustomerID: string) => {
+        if (!lodash.isEmpty(dataOrderList)) {
+            if (await UpdateCustomerOrder_Logic(dataOrderList[IndexOrderlist].OrderID, CustomerID)) {
+                GetData(1)
+            }
+            else {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Thông báo',
+                    text2: 'Không thành công'
+                });
+            }
+        }
+
+    }
     useEffect(() => {
         props.navigation.addListener('focus', () => {
             GetData(1);
@@ -240,8 +264,8 @@ const DetailDeskView = (props: any) => {
         }
         else {
             setHeightBegin(0)
-            setHeightChange(hp(85))
-            setColor('rgba(0,0,0,0.8)')
+            setHeightChange(hp(80))
+            setColor('rgba(0,0,0,0.4)')
             setImageBottom(TurnDouwnViewPayMent)
         }
     }
@@ -288,7 +312,8 @@ const DetailDeskView = (props: any) => {
     }
     const onCancelOrder = async () => {
         if (await CancelOrder_Logic(dataOrder != null ? dataOrder.TransactionID : '', !lodash.isEmpty(dataOrderList) ? dataOrderList[IndexOrderlist].OrderID : '')) {
-            GetData(1)
+
+            GetData(3)
         }
         else {
             Toast.show({
@@ -314,7 +339,7 @@ const DetailDeskView = (props: any) => {
                         setIndexDetailID(data.index)
                         setVisible_Detail(true)
                     }}>
-                    <Image source={All} style={{ height: 20, width: wp(4), resizeMode: 'contain' }}></Image>
+                    <Image source={All} style={{ height: 20, width: wp(4), resizeMode: 'contain', tintColor: 'white' }}></Image>
                 </TouchableOpacity>
 
             </View>
@@ -327,12 +352,19 @@ const DetailDeskView = (props: any) => {
         }
     }
     const onCheckPaymentOrder = () => {
-        if (!lodash.isEmpty(dataOrderList)) {
-            let data = dataOrderList.filter(item => item.Status == 3)
-            if (data.length == 0) {
-                setVisible_QuestionCancel(true)
-            }
-        }
+        // if (!lodash.isEmpty(dataOrderList)) {
+        //     let data = dataOrderList.filter(item => item.Status == 3)
+        //     if (data.length == 0) {
+        //         setVisible_QuestionCancel(true)
+        //     }
+        // }
+    }
+    const onToast = () => {
+        Toast.show({
+            type: 'error',
+            text1: 'Thông báo',
+            text2: 'Chức năng không thể thực hiện lúc này'
+        });
     }
     const onBlur = async (OrderDetailID: string) => {
         if (QuantityInput > 0) {
@@ -341,7 +373,7 @@ const DetailDeskView = (props: any) => {
     }
     const ViewData = () => {
         return (
-            <LinearGradient colors={['#454545', '#585757', '#4C4C4C']} style={{ width: '100%', paddingBottom: hp(15), height: '100%', zIndex: 1, flex: 1 }}>
+            <LinearGradient colors={['#305B3D', '#305B3D', '#305B3D']} style={{ width: '100%', paddingBottom: hp(15), height: '100%', zIndex: 1, flex: 1 }}>
                 {!lodash.isEmpty(dataOrderDetail) ? <SwipeListView
                     keyExtractor={(item) => item.FoodID.toString()}
                     closeOnRowPress={true}
@@ -361,8 +393,8 @@ const DetailDeskView = (props: any) => {
                             Note={item.CommentText}
                             onBlur={() => { CheckValueCondition(6) ? item.Status == 1 ? onBlur(item.DetailID) : {} : {} }}
                             onChangeText={(value) => { CheckValueCondition(6) ? item.Status == 1 ? onChangeText(value) : {} : {} }}
-                            onPressMinus={() => { CheckValueCondition(6) ? item.Status == 1 ? onChangeQuantity(false, item.DetailID, item.Quantity) : {} : {} }}
-                            onPressPlus={() => { CheckValueCondition(6) ? item.Status == 1 ? onChangeQuantity(true, item.DetailID, item.Quantity) : {} : {} }}
+                            onPressMinus={() => { CheckValueCondition(6) ? item.Status == 1 ? onChangeQuantity(false, item.DetailID, item.Quantity) : onToast() : onToast() }}
+                            onPressPlus={() => { CheckValueCondition(6) ? item.Status == 1 ? onChangeQuantity(true, item.DetailID, item.Quantity) : onToast() : onToast() }}
                             TypeItem={item.Status}
                             DiscountPrice={item.DiscountAmount}
                             NameFood={item.FoodName}
@@ -519,56 +551,56 @@ const DetailDeskView = (props: any) => {
     const ViewDataBottom = () => {
         return (
             <View style={{ height: hp(100), width: '100%', backgroundColor: Color, position: 'absolute', bottom: HeightBegin, zIndex: 2, justifyContent: 'flex-end' }}>
-
-                <LinearGradient colors={['#15604C', '#2C9176', '#3DA78B']} style={{ height: HeightChange, width: '100%', borderTopLeftRadius: 15, borderTopRightRadius: 15, elevation: 10, flexDirection: 'column', alignItems: 'center', }}>
+                <Toast position='top' />
+                <LinearGradient colors={['#FFFFFF', '#FFFFFF', '#FFFFFF']} style={{ height: HeightChange, width: '100%', borderTopLeftRadius: 15, borderTopRightRadius: 15, elevation: 10, flexDirection: 'column', alignItems: 'center', borderColor: mainColors.greenscolor, borderTopWidth: 2, borderLeftWidth: 1, borderRightWidth: 1 }}>
                     <TouchableOpacity onPress={() => {
                         ShowViewPayment()
                     }} style={{ flexDirection: 'column', alignItems: 'center', width: '100%' }} >
                         <View style={{ height: 20, width: '35%', borderRadius: 15, marginTop: 5, alignItems: 'center', justifyContent: 'center' }}>
-                            <Image source={ImageBottom} style={{ height: 20, width: 35, resizeMode: 'stretch' }}></Image>
+                            <Image source={ImageBottom} style={{ height: 20, width: 35, resizeMode: 'stretch', tintColor: 'black' }}></Image>
                         </View>
-                        <Text style={{ marginTop: 2, height: hp(3), fontSize: hp(2.2), fontFamily: Fonts.Roboto_Stab_Bold, textDecorationLine: 'underline', color: 'white' }}>HÓA ĐƠN BÁN HÀNG</Text>
-                        <Text style={{ marginTop: 2, height: hp(2), fontSize: hp(1.8), fontFamily: Fonts.Roboto_Slab_Regular, color: 'white' }}>({dataOrder != null ? dataOrder.CustomerName : ''})</Text>
+                        <Text style={{ marginTop: 2, height: hp(3), fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, textDecorationLine: 'underline', color: 'black' }}>HÓA ĐƠN BÁN HÀNG</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => { setVisible_Customer(true) }}
+                        style={styles.heder_bottom_text}>
+                        <Text style={{ fontSize: hp(2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black' }}>Khách Hàng</Text>
+                        <Text style={{ fontSize: hp(2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'blue' }}>{dataOrder != null ? dataOrder.CustomerName : ''}🔻</Text>
+                    </TouchableOpacity>
+                    <View style={{ backgroundColor: '#ACAEAD', width: '100%', height: 1, marginTop: 2 }}></View>
                     <View style={styles.heder_bottom_text}>
-                        <Text style={{ fontSize: hp(2), fontFamily: Fonts.Roboto_Stab_Bold, color: 'white' }}>Thành Tiền:</Text>
-                        <Text style={{ fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'white' }}>{dataOrder != null ? getDataByThing.getcurrency(dataOrder.Amount) : 0}đ</Text>
+                        <Text style={{ fontSize: hp(2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black' }}>Thành Tiền:</Text>
+                        <Text style={{ fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'blue' }}>{dataOrder != null ? getDataByThing.getcurrency(dataOrder.Amount) : 0}đ</Text>
                     </View>
                     <View style={{ backgroundColor: '#AEACAC', width: '100%', height: 1, marginTop: 2 }}></View>
                     <View style={styles.heder_bottom_text}>
-                        <Text style={{ fontSize: hp(2), fontFamily: Fonts.Roboto_Stab_Bold, color: 'white' }}>Giảm Giá:</Text>
-                        <Text style={{ fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'white' }}>{dataOrder != null ? getDataByThing.getcurrency(dataOrder.DiscountAmount) : 0}đ</Text>
+                        <Text style={{ fontSize: hp(2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black' }}>Giảm Giá:</Text>
+                        <Text style={{ fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'blue' }}>{dataOrder != null ? getDataByThing.getcurrency(dataOrder.DiscountAmount) : 0}đ</Text>
                     </View>
                     <View style={{ backgroundColor: '#AEACAC', width: '100%', height: 1, marginTop: 2 }}></View>
                     <View style={styles.heder_bottom_text}>
-                        <Text style={{ fontSize: hp(2), fontFamily: Fonts.Roboto_Stab_Bold, color: 'white' }}>Phí DV</Text>
-                        <Text style={{ fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'white' }}>0đ</Text>
-                    </View>
-                    <View style={{ backgroundColor: '#AEACAC', width: '100%', height: 1, marginTop: 2 }}></View>
-                    <View style={styles.heder_bottom_text}>
-                        <Text style={{ fontSize: hp(2.2), fontFamily: Fonts.Roboto_Stab_Bold, color: 'white' }}>Tổng Tiền:</Text>
-                        <Text style={{ fontSize: hp(2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'white' }}>{dataOrder != null ? getDataByThing.getcurrency(dataOrder.TotalAmount) : 0}đ</Text>
+                        <Text style={{ fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black' }}>Tổng Tiền:</Text>
+                        <Text style={{ fontSize: hp(2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'blue' }}>{dataOrder != null ? getDataByThing.getcurrency(dataOrder.TotalAmount) : 0}đ</Text>
                     </View>
                     <View style={{ backgroundColor: '#AEACAC', width: '100%', height: 1, marginTop: 2, marginBottom: 10 }}></View>
                     {/* các nút */}
                     <Toast position='top' />
-                    <ScrollView style={{ width: '100%', paddingBottom: 10 }}  >
+                    <View style={{ width: '100%', }}  >
                         <View style={styles.view_bottom_icon}>
                             <IconDetailDeskCustom
-                                Status={CheckValueCondition(3)}
+                                Status={true}
                                 sourceICon={MonKhac}
                                 title={'Món Khác'}
                                 onPress={() => {
-
+                                    setVisible_AddOtherFood(true)
                                 }}
                             ></IconDetailDeskCustom>
                             <IconDetailDeskCustom
                                 Status={true}
                                 sourceICon={PhiDV}
-                                onPress={() => { }}
+                                onPress={() => { setVisible_AddSeviceCharge(true) }}
                                 title={'Phí DV'}
                             ></IconDetailDeskCustom>
-
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(11)}
                                 onPress={() => { CheckValueCondition(11) ? setVisible_DicoundOrder(true) : {} }}
@@ -577,7 +609,7 @@ const DetailDeskView = (props: any) => {
                             ></IconDetailDeskCustom>
                             <IconDetailDeskCustom
                                 Status={true}
-                                onPress={() => { }}
+                                onPress={() => { setVisible_AddTipCharge(true) }}
                                 sourceICon={GiveMoney}
                                 title={'Tiền Típ'}
                             ></IconDetailDeskCustom>
@@ -586,21 +618,21 @@ const DetailDeskView = (props: any) => {
                         <View style={styles.view_bottom_icon}>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(9)}
-                                onPress={() => { CheckValueCondition(9) ? onRequestPaymentOrder() : {} }}
+                                onPress={() => { CheckValueCondition(9) ? onRequestPaymentOrder() : onToast() }}
                                 sourceICon={YCThanhToan}
                                 title={'YC Thanh Toán'}
                             ></IconDetailDeskCustom>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(12)}
                                 onPress={() => {
-                                    CheckValueCondition(12) ? setVisible_Payment(true) : {}
+                                    CheckValueCondition(12) ? setVisible_Payment(true) : onToast()
                                 }}
                                 sourceICon={PayMent}
                                 title={'Thanh Toán'}
                             ></IconDetailDeskCustom>
                             <IconDetailDeskCustom
                                 Status={true}
-                                onPress={() => { ConnectPrinter_Logic() }}
+                                onPress={() => { setVisible_SelectPrinter(true) }}
                                 sourceICon={Printer}
                                 title={'In HĐ'}
                             ></IconDetailDeskCustom>
@@ -615,25 +647,25 @@ const DetailDeskView = (props: any) => {
                         <View style={styles.view_bottom_icon}>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(13)}
-                                onPress={() => { CheckValueCondition(13) ? SendToCookonMenu(!lodash.isEmpty(dataOrderList) ? dataOrderList[IndexOrderlist].OrderID : '') : {} }}
+                                onPress={() => { CheckValueCondition(13) ? SendToCookonMenu(!lodash.isEmpty(dataOrderList) ? dataOrderList[IndexOrderlist].OrderID : '') : onToast() }}
                                 sourceICon={SendToCook}
                                 title={'Gữi Nhà Bếp'}
                             ></IconDetailDeskCustom>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(15)}
-                                onPress={() => { CheckValueCondition(15) ? setVisible_SendFood(true) : {} }}
+                                onPress={() => { CheckValueCondition(15) ? setVisible_SendFood(true) : onToast() }}
                                 sourceICon={ChuyenMon}
                                 title={'Chuyển Món'}
                             ></IconDetailDeskCustom>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(15)}
-                                onPress={() => { CheckValueCondition(15) ? setVisible_TranferTable(true) : {} }}
+                                onPress={() => { CheckValueCondition(15) ? setVisible_TranferTable(true) : onToast() }}
                                 sourceICon={ChuyenBan}
                                 title={'Chuyển Bàn'}
                             ></IconDetailDeskCustom>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(10)}
-                                onPress={() => { CheckValueCondition(10) ? onReAddHour() : {} }}
+                                onPress={() => { CheckValueCondition(10) ? onReAddHour() : onToast() }}
                                 sourceICon={RefeshTime}
                                 title={'Tính Lại Giờ'}
                             ></IconDetailDeskCustom>
@@ -642,25 +674,25 @@ const DetailDeskView = (props: any) => {
                         <View style={styles.view_bottom_icon}>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(7)}
-                                onPress={() => { CheckValueCondition(7) ? onSplitOrder_onDesk() : {} }}
+                                onPress={() => { CheckValueCondition(7) ? onSplitOrder_onDesk() : onToast() }}
                                 sourceICon={TachHD}
                                 title={'Tách HD'}
                             ></IconDetailDeskCustom>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(1)}
-                                onPress={() => CheckValueCondition(1) ? setVisible_GetTableMerge(true) : {}}
+                                onPress={() => CheckValueCondition(1) ? setVisible_GetTableMerge(true) : onToast()}
                                 sourceICon={TachBan}
                                 title={'Tách Bàn'}
                             ></IconDetailDeskCustom>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(4)}
-                                onPress={() => { CheckValueCondition(4) ? setVisible_OrderMerge(true) : {} }}
+                                onPress={() => { CheckValueCondition(4) ? setVisible_OrderMerge(true) : onToast() }}
                                 sourceICon={GopHD}
                                 title={'Gộp HĐ'}
                             ></IconDetailDeskCustom>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(2)}
-                                onPress={() => { CheckValueCondition(2) ? setVisible_TableMerge(true) : {} }}
+                                onPress={() => { CheckValueCondition(2) ? setVisible_TableMerge(true) : onToast() }}
                                 sourceICon={GopBan}
                                 title={'Gộp Bàn'}
                             ></IconDetailDeskCustom>
@@ -669,24 +701,24 @@ const DetailDeskView = (props: any) => {
                         <View style={styles.view_bottom_icon}>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(14)}
-                                onPress={() => { CheckValueCondition(14) ? onCancelOrder() : '' }}
+                                onPress={() => { CheckValueCondition(14) ? onCancelOrder() : onToast() }}
                                 sourceICon={HuyHD}
                                 title={'Hủy HĐ'}
                             ></IconDetailDeskCustom>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(5)}
-                                onPress={() => { CheckValueCondition(5) ? CancelTable_onDesk() : {} }}
+                                onPress={() => { CheckValueCondition(5) ? CancelTable_onDesk() : onToast() }}
                                 sourceICon={HuyBan}
                                 title={'Hủy Bàn'}
                             ></IconDetailDeskCustom>
                             <IconDetailDeskCustom
                                 Status={CheckValueCondition(8)}
-                                onPress={() => { CheckValueCondition(8) ? onCloseTable() : {} }}
+                                onPress={() => { CheckValueCondition(8) ? onCloseTable() : onToast() }}
                                 sourceICon={DoanBan}
                                 title={'Đóng Bàn'}
                             ></IconDetailDeskCustom>
                         </View>
-                    </ScrollView>
+                    </View>
                 </LinearGradient>
             </View>
         )
@@ -969,18 +1001,94 @@ const DetailDeskView = (props: any) => {
                         </View>
                     </TouchableWithoutFeedback>
                 </Modal>
+                <Modal
+                    animationType='slide'
+                    transparent
+                    visible={Visible_AddOtherFood}
+                    presentationStyle='formSheet'
+                    style={{ justifyContent: 'flex-end', margin: 0 }}
+                    onDismiss={() => { setVisible_AddOtherFood(false) }}>
+                    <DialogAddOtherFood
+                        OrderID={!lodash.isEmpty(dataOrderList) ? dataOrderList[IndexOrderlist].OrderID : ''}
+                        onPressClose={() => { setVisible_AddOtherFood(false) }}
+                        onPressOK={() => {
+                            setVisible_AddOtherFood(false)
+                            GetData(1)
+                        }}></DialogAddOtherFood>
+                </Modal>
+                <Modal
+                    animationType='slide'
+                    transparent
+                    visible={Visible_Customer}
+                    presentationStyle='formSheet'
+                    style={{ justifyContent: 'flex-end', margin: 0 }}
+                    onDismiss={() => { setVisible_Customer(false) }}>
+                    <DialogCustomer
+
+                        onPressClose={() => { setVisible_Customer(false) }}
+                        onPressOK={(value) => {
+                            setVisible_Customer(false)
+                            onUpdateCustome(value.ObjectID)
+                        }}></DialogCustomer>
+                </Modal>
+                <Modal
+                    animationType='slide'
+                    transparent
+                    visible={Visible_AddSeviceCharge}
+                    presentationStyle='formSheet'
+                    style={{ justifyContent: 'flex-end', margin: 0 }}
+                    onDismiss={() => { setVisible_AddSeviceCharge(false) }}>
+                    <DialogAddServiceCharge
+                        OrderID={!lodash.isEmpty(dataOrderList) ? dataOrderList[IndexOrderlist].OrderID : ''}
+                        onPressClose={() => { setVisible_AddSeviceCharge(false) }}
+                        onPressOK={() => {
+                            setVisible_AddSeviceCharge(false)
+                            GetData(1)
+                        }}></DialogAddServiceCharge>
+                </Modal>
+                <Modal
+                    animationType='slide'
+                    transparent
+                    visible={Visible_AddTipCharge}
+                    presentationStyle='formSheet'
+                    style={{ justifyContent: 'flex-end', margin: 0 }}
+                    onDismiss={() => { setVisible_AddTipCharge(false) }}>
+                    <DialogAddTipCharge
+                        OrderID={!lodash.isEmpty(dataOrderList) ? dataOrderList[IndexOrderlist].OrderID : ''}
+                        onPressClose={() => { setVisible_AddTipCharge(false) }}
+                        onPressOK={() => {
+                            setVisible_AddTipCharge(false)
+                            GetData(1)
+                        }}></DialogAddTipCharge>
+                </Modal>
+                <Modal
+                    animationType='slide'
+                    transparent
+                    visible={Visible_SelectPrinter}
+                    presentationStyle='formSheet'
+                    style={{ justifyContent: 'flex-end', margin: 0 }}
+                    onDismiss={() => { setVisible_SelectPrinter(false) }}>
+                    <     DialogSelectPrinterOrder
+                        // OrderID={!lodash.isEmpty(dataOrderList) ? dataOrderList[IndexOrderlist].OrderID : ''}
+                        onPressClose={() => { setVisible_SelectPrinter(false) }}
+                        onPressOK={() => {
+                            setVisible_SelectPrinter(false)
+                            // GetData(1)
+                        }}></     DialogSelectPrinterOrder>
+                </Modal>
+
             </View >
         )
     }
+
     return (
-        <SafeAreaView style={{ flex: 1, flexDirection: 'column', backgroundColor: '#232323', }}>
+        <SafeAreaView style={{ flex: 1, flexDirection: 'column', backgroundColor: '#C6C6C6', }}>
 
             {ViewHeader()}
 
             {!lodash.isEmpty(dataOrderList) ? ViewData() : <View style={{ flex: 1, backgroundColor: '#CDFBF7', }}></View>}
             {/* viewdata */}
             {ViewDataBottom()}
-
             {/* ViewModal */}
             {ViewModal()}
 

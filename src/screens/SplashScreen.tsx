@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text, Image, Platform } from 'react-native';
 //import CodePush from 'react-native-code-push';
 import {
   widthPercentageToDP as wp,
@@ -57,7 +57,30 @@ export const SplashScreen = (props: any) => {
         break;
     }
   };
+  // useEffect(() => {
+ 
+  //     if (Platform.OS = 'ios') {
+  //       CodePush.sync(
+  //         {
+  //           deploymentKey: 'd29lbjTJxupk8gyrgIxhT6q-XXg3ByOaZ1_PR', //ios STAGING
+  //         },
+  //         codePushStatusDidChange,
+  //         null
+  //       );
+  //     } else if (Platform.OS = 'android') {
+  //       CodePush.sync(
+  //         {
+  //           deploymentKey: "QqcaOVk6ekl8qnGf7QNPilhRh_FGt7TmrVMGj"//android staging
+           
+  //         },
+  //         codePushStatusDidChange,
+  //         null
+  //       );
+  //     }
+  
+  // }, []);
   useEffect(() => {
+
     CodePush.sync(
       {
         deploymentKey: "QqcaOVk6ekl8qnGf7QNPilhRh_FGt7TmrVMGj"//android staging

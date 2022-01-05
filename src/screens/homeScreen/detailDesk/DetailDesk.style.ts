@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
   view_bottom_icon: {
 
-    width: '100%', height: hp(10), flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'
+    width: '100%', height: 'auto', marginTop: 2, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'
   },
   ImageViewButton: {
     paddingLeft: 3.5,

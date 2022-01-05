@@ -218,7 +218,7 @@ export const MenuDetailView = (props: MenuDetail) => {
         return (
             <View style={{ height: 50, width: '100%', backgroundColor: 'white', elevation: 2, flexDirection: 'row', paddingLeft: 2, paddingRight: 2, alignItems: 'center', justifyContent: 'space-around' }}>
                 <TextInput
-                    style={{ height: 40, width: '65%', backgroundColor: 'white', fontSize: 17, fontFamily: Fonts.Roboto_Slab_Regular, color: 'black' }}
+                    style={{ height: 40, paddingVertical: 0, width: '65%', backgroundColor: 'white', fontSize: 17, fontFamily: Fonts.Roboto_Slab_Regular, color: 'black' }}
                     mode={'outlined'}
                     onChangeText={onChangeText}
                     label={'Tìm Kiếm'}>
@@ -240,6 +240,7 @@ export const MenuDetailView = (props: MenuDetail) => {
                 </View>
             </View>
         );
+
     }
     return (
         <KeyboardAvoidingView

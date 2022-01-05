@@ -60,6 +60,8 @@ export const ItemDetailDeskCustom = (props: ItemDetailDeskCustom) => {
                     backgroundColor: 'white',
                     position: 'relative',
                     zIndex: 0,
+                    borderColor: mainColors.smokecolor,
+                    borderWidth: 1
                 }}>
                 {isTakeAway ? <Image source={TakeAwayDetail} style={{ height: 30, width: 30, position: 'absolute', zIndex: 1, left: wp(90), alignItems: 'center', justifyContent: 'center', resizeMode: 'contain' }}>
                 </Image> : <View style={{ position: 'absolute', zIndex: 1, left: wp(90), }}></View>}

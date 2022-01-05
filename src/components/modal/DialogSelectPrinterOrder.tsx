@@ -18,41 +18,61 @@ import {
 import { Fonts, mainColors } from '../../constants';
 import Ripple from 'react-native-material-ripple';
 import { TextInputCustom } from '../userComponents/TextInputCustom';
-import { TurnDowwn } from '../../assets/index';
+import { Clock, TurnDowwn } from '../../assets/index';
 import { Button, Card, Searchbar, IconButton, } from 'react-native-paper';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 import { IconDetailCustom } from '../iconsCustom/IconDetailCustom';
 import getDataByThing from '../../utils/getDataByThing';
+import DatePicker from 'react-native-date-picker'
 import moment from 'moment';
-interface DialogOpenTableNotHasHourMoney {
-
+import { useSelector } from 'react-redux';
+import { PrinterList } from '../object/Order';
+import { FlatList } from 'react-native-gesture-handler';
+import { DetailDesk_Logic } from '../../screens/homeScreen/detailDesk/DetailDeskLogic'
+interface DialogSelectPrinterOrder {
     onPressClose: any;
     onPressOK: any;
-    caption: string;
-    type: boolean
-
 }
 
-export const DialogOpenTableNotHasHourMoney = (props: DialogOpenTableNotHasHourMoney) => {
-    const { onPressClose, onPressOK, caption, type } = props;
+export const DialogSelectPrinterOrder = (props: DialogSelectPrinterOrder) => {
+    const { onPressClose, onPressOK } = props;
+    const { PrinterOrder_Logic } = DetailDesk_Logic(props)
+    const { isFinger } = useSelector((state: any) => ({
+        isFinger: state?.auth?.isFinger,
+    }));
+    const [List, setList] = useState(Array<PrinterList>())
     useEffect(() => {
-
+        setList(isFinger)
         return () => { };
     }, []);
-
+    const ViewDataPrinter = (item, index) => {
+        return (
+            <TouchableOpacity
+                onPress={() => { PrinterOrder_Logic(item.IpAdress, item.Port, true, Number.parseInt(item.SizePaper)) }}
+                style={{ height: 60, width: '45%', backgroundColor: 'white', elevation: 1, borderColor: mainColors.smokecolor, borderRadius: 5, borderWidth: 1, paddingLeft: 2, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ fontFamily: Fonts.Roboto_Slab_Regular, fontSize: 15, color: 'black' }}>{index + 1}. {item.NamePrinter}</Text>
+            </TouchableOpacity>
+        );
+    }
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
                 <View style={styles.containerItem}>
                     <View style={[styles.headerView]}>
-                        <Text style={styles.headerTitle}>Thông Báo</Text>
+                        <Text style={styles.headerTitle}>Chọn Máy In</Text>
                         <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 25, width: 25 }} onPress={() => { onPressClose() }}>
                             <Image style={{ height: 25, width: 25 }} source={TurnDowwn} ></Image>
                         </TouchableOpacity>
                     </View>
-
-                    <View style={styles.view_center}>
-                        <Text style={{ fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(2.5), color: 'black' }}>Bạn Muốn Mở {caption}?</Text>
+                    <View style={{ width: '100%', height: hp(27), alignItems: 'flex-start', elevation: 2, flexDirection: 'row', backgroundColor: 'white', padding: 2 }}>
+                        <FlatList
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
+                            numColumns={2}
+                            keyExtractor={(item, index) => 'key' + index}
+                            data={List}
+                            renderItem={({ item, index }) => (ViewDataPrinter(item, index))}
+                        ></FlatList>
                     </View>
                     <View style={styles.viewBottomButton}>
                         <TouchableOpacity
@@ -60,7 +80,7 @@ export const DialogOpenTableNotHasHourMoney = (props: DialogOpenTableNotHasHourM
                             Platform.OS == 'ios' ? styles.shadowIos : styles.shadowAndroid,
                             ]}
                             onPress={() => { onPressOK() }}>
-                            <Text style={styles.textButton}>Mở Bàn</Text>
+                            <Text style={styles.textButton}>Đóng</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -80,18 +100,22 @@ const styles = StyleSheet.create({
     containerItem: {
         backgroundColor: '#FFF',
         borderRadius: 2,
-        height: hp(35),
+        height: hp(40),
         width: '100%',
         flexDirection: 'column',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     view_center: {
         height: hp(20),
         width: '100%',
-        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        elevation: 2,
         paddingLeft: 10,
         paddingRight: 10,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center',
+
     },
     text_center: {
         fontFamily: Fonts.Roboto_Slab_Regular,
@@ -100,6 +124,7 @@ const styles = StyleSheet.create({
 
     headerView: {
         height: hp(6),
+        width: '100%',
         paddingLeft: 15,
         paddingRight: 15,
         flexDirection: 'row',
@@ -116,10 +141,10 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        backgroundColor: '#ffff',
+        backgroundColor: mainColors.greenscolor,
         marginBottom: 3,
-        width: wp(65),
-        height: hp(6),
+        width: wp(25),
+        height: hp(5),
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5
@@ -133,14 +158,15 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
     },
     textButton: {
-        fontSize: hp(2.5),
+        fontSize: hp(2),
         fontFamily: Fonts.Roboto_Slab_Regular,
-        color: mainColors.greenscolor,
+        color: mainColors.whiteColor,
     },
     viewBottomButton: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
+        width: '100%',
+        alignItems: 'flex-end',
         marginBottom: 5,
+
     },
     bodypu: {
         marginBottom: 5,

@@ -19,7 +19,7 @@ import {
 import { Fonts, mainColors } from '../../constants';
 import Ripple from 'react-native-material-ripple';
 import { TextInputCustom } from '../userComponents/TextInputCustom';
-import { Clock, TurnDowwn } from '../../assets/index';
+import { Clock, Plus, TurnDowwn } from '../../assets/index';
 import { Button, Card, Searchbar, IconButton, TextInput, } from 'react-native-paper';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 import { IconDetailCustom } from '../iconsCustom/IconDetailCustom';
@@ -28,6 +28,7 @@ import DatePicker from 'react-native-date-picker'
 import { SetBeforeLogic } from '../../screens/homeScreen/setbefore/SetBeforeLogic'
 import { ReservationList } from '../object/Order';
 import Toast from 'react-native-toast-message';
+import { DialogCustomer } from './DialogCustomer';
 interface DialogAddReservation {
     onPressClose: any;
     onPressOK: any;
@@ -53,6 +54,7 @@ export const DialogAddReservation = (props: DialogAddReservation) => {
         isActive: false,
     })
     const [VisbleDialogDate, setVisbleDialogDate] = useState(false)
+    const [VisbleDialogCustomer, setVisbleDialogCustomer] = useState(false)
 
     const { AddReservation_Logic } = SetBeforeLogic(props)
     const GetDateTime = () => {
@@ -191,18 +193,22 @@ export const DialogAddReservation = (props: DialogAddReservation) => {
                 <View style={{ height: hp(50), width: '100%', flexDirection: 'column' }}>
 
                     <View style={{ height: hp(10), width: '100%', padding: 5, flexDirection: 'column', justifyContent: 'space-between', backgroundColor: 'white', elevation: 2 }}>
-
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={{ fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(1.8), color: '#050571' }}>Tên Khách Hàng</Text>
                             <Text style={{ fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(1.8), color: '#A20101' }}>*</Text>
                         </View>
-                        <TextInput
-                            style={{ height: hp(5), width: '100%', fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
-                            mode='outlined'
-                            onChangeText={(value) => { setReservation({ ...Reservation, CustomerName: value }) }}
-                            placeholder='Tên Khách Hàng'
-                            value={!!Reservation ? Reservation.CustomerName : ''}
-                        ></TextInput>
+                        <View style={{ flexDirection: 'row' }}>
+                            <TextInput
+                                style={{ height: hp(5), width: '85%',  paddingVertical: 0, fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
+                                mode='outlined'
+                                onChangeText={(value) => { setReservation({ ...Reservation, CustomerName: value }) }}
+                                placeholder='Tên Khách Hàng'
+                                value={!!Reservation ? Reservation.CustomerName : ''}
+                            ></TextInput>
+                            <TouchableOpacity onPress={() => { setVisbleDialogCustomer(true) }} style={{ height: hp(7), width: '15%', alignItems: 'center', justifyContent: 'center' }}>
+                                <Text style={{ fontFamily: Fonts.Roboto_Stab_Bold, fontSize: 10, color: 'blue' }}>Chọn</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                     <View style={{ height: hp(10), width: '100%', padding: 5, flexDirection: 'column', justifyContent: 'space-between', backgroundColor: 'white', elevation: 2 }}>
                         <View style={{ flexDirection: 'row' }}>
@@ -212,7 +218,7 @@ export const DialogAddReservation = (props: DialogAddReservation) => {
                         <TextInput
                             onFocus={() => { }}
                             onBlur={() => { onBlurTextPhone() }}
-                            style={{ height: hp(5), width: '100%', fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
+                            style={{ height: hp(5), width: '100%', fontSize: hp(2.2),  paddingVertical: 0, fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
                             mode='outlined'
                             keyboardType='number-pad'
                             onChangeText={(value) => { onTextChangePhone(value) }}
@@ -226,7 +232,7 @@ export const DialogAddReservation = (props: DialogAddReservation) => {
                             <Text style={{ fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(1.8), color: '#A20101' }}>*</Text>
                         </View>
                         <TextInput
-                            style={{ height: hp(5), width: '100%', fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
+                            style={{ height: hp(5), width: '100%', fontSize: hp(2.2),   paddingVertical: 0,fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
                             mode='outlined'
                             keyboardType='number-pad'
                             onChangeText={(value) => { onTextChangeNUmber(value) }}
@@ -256,7 +262,7 @@ export const DialogAddReservation = (props: DialogAddReservation) => {
                             <Text style={{ fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(1.8), color: '#A20101' }}>*</Text>
                         </View>
                         <TextInput
-                            style={{ height: hp(5), width: '100%', fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
+                            style={{ height: hp(5), width: '100%', fontSize: hp(2.2),   paddingVertical: 0,fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
                             mode='outlined'
                             onChangeText={(value) => { setReservation({ ...Reservation, Notes: value }) }}
                             placeholder='Ghi Chú'
@@ -292,6 +298,50 @@ export const DialogAddReservation = (props: DialogAddReservation) => {
                     onDismiss={() => { setVisbleDialogDate(false) }} >
                     {ViewDialogDate()}
                 </Modal>
+                <Modal
+                    animationType='slide'
+                    transparent
+                    visible={VisbleDialogCustomer}
+                    presentationStyle='formSheet'
+                    style={{ justifyContent: 'flex-end', margin: 0 }}
+                    onDismiss={() => {
+                        setVisbleDialogCustomer(false)
+
+                    }}
+                >
+                    <DialogCustomer
+                        onPressOK={(value) => {
+                            setVisbleDialogCustomer(false)
+                            setReservation({
+                                ...Reservation, CustomerID: value.ObjectID,
+                                CustomerName: value.ObjectName,
+                                CustomerPhone: value.ObjectPhone,
+
+                            })
+                        }}
+                        onPressClose={() => {
+                            setVisbleDialogCustomer(false)
+                            setReservation({
+                                ReservationID: "00000000-0000-0000-0000-000000000000",
+                                CreatedDate: getDataByThing.getDateTimeFormatToAPI(today),
+                                Status: 1,
+                                VisitedDate: getDataByThing.getDateTimeFormatToAPI(today),
+                                Persons: 0,
+                                CustomerID: '',
+                                CustomerName: '',
+                                CustomerPhone: '',
+                                UpdateDate: '',
+                                CancelationBy: '',
+                                CancelationDate: '',
+                                CancelationNote: '',
+                                Notes: '',
+                                SearchString: '',
+                                isActive: false,
+                            })
+                        }}
+                    ></DialogCustomer>
+                </Modal>
+
                 <Toast position='top' autoHide={true} topOffset={0} />
             </View >
 

@@ -163,7 +163,7 @@ export const DialogUpdateReservation = (props: DialogUpdateReservation) => {
                             <Text style={{ fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(1.8), color: '#A20101' }}>*</Text>
                         </View>
                         <TextInput
-                            style={{ height: hp(5), width: '100%', fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
+                            style={{ height: hp(5),  paddingVertical: 0, width: '100%', fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
                             mode='outlined'
                             onChangeText={(value) => { setReservation({ ...Reservation, CustomerName: value }) }}
                             placeholder='Tên Khách Hàng'
@@ -178,7 +178,7 @@ export const DialogUpdateReservation = (props: DialogUpdateReservation) => {
                         <TextInput
                             onFocus={() => { }}
                             onBlur={() => { onBlurTextPhone() }}
-                            style={{ height: hp(5), width: '100%', fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
+                            style={{ height: hp(5), width: '100%',  paddingVertical: 0, fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
                             mode='outlined'
                             keyboardType='number-pad'
                             onChangeText={(value) => { onTextChangePhone(value) }}
@@ -192,7 +192,7 @@ export const DialogUpdateReservation = (props: DialogUpdateReservation) => {
                             <Text style={{ fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(1.8), color: '#A20101' }}>*</Text>
                         </View>
                         <TextInput
-                            style={{ height: hp(5), width: '100%', fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
+                            style={{ height: hp(5), width: '100%',  paddingVertical: 0, fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
                             mode='outlined'
                             keyboardType='number-pad'
                             onChangeText={(value) => { onTextChangeNUmber(value) }}
@@ -223,7 +223,7 @@ export const DialogUpdateReservation = (props: DialogUpdateReservation) => {
                             <Text style={{ fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(1.8), color: '#A20101' }}>*</Text>
                         </View>
                         <TextInput
-                            style={{ height: hp(5), width: '100%', fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
+                            style={{ height: hp(5), width: '100%',  paddingVertical: 0, fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
                             mode='outlined'
 
                             onChangeText={(value) => { setReservation({ ...Reservation, Notes: value }) }}

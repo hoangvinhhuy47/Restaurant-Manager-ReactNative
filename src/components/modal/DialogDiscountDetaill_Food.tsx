@@ -197,7 +197,7 @@ export const DialogDiscountDetaill_Food = (props: DialogDiscountDetaill_Food) =>
                         keyboardType={'number-pad'}
                         maxLength={3}
                         mode={'outlined'}
-                        style={{ height: hp(6), backgroundColor: 'white', width: '60%', fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(2) }}
+                        style={{ height: hp(6), backgroundColor: 'white',  paddingVertical: 0, width: '60%', fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(2) }}
                         onChangeText={onChangeValuePercent}
                         value={DiscountValue.toString()}
                         placeholder={'Giảm Giá Theo%'}

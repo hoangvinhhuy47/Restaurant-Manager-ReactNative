@@ -6441,6 +6441,11 @@ react-native-tab-view@^3.1.1:
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz#1f8d7a835ab4f5b1b1407ec8dddc1053b53fa3c6"
   integrity sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw==
 
+react-native-thermal-printer@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-thermal-printer/-/react-native-thermal-printer-2.1.0.tgz#43d2159ac1204172d354c7906113ffd9cfb05e65"
+  integrity sha512-vdV/jhSVBpVjBboLQyJAqJor+xac7oMhPAhwm+6ClLDVx9Q88Khk/aIp7qR6ivBrALh3O9nw9+8poHjZVezRdQ==
+
 react-native-toast-message@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.1.0.tgz#973568a4ef2f2563515c45fcda166e590bb39ee9"

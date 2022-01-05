@@ -198,7 +198,7 @@ export const DialogDiscountOrder = (props: DialogDiscountOrder) => {
 
                         keyboardType={'numeric'}
                         mode={'outlined'}
-                        style={{ height: hp(7), backgroundColor: 'white', width: '60%', fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(2) }}
+                        style={{ height: hp(7), backgroundColor: 'white',  paddingVertical: 0, width: '60%', fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(2) }}
                         onChangeText={onChangeValuePercent}
                         value={DiscountValue.toString()}
                         placeholder={'Giảm Giá Theo %'}

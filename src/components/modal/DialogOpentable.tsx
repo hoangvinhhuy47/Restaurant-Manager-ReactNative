@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     height: hp(6),
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 0.5,
+    borderRadius: 5
   },
   shadowAndroid: {
     elevation: 5,

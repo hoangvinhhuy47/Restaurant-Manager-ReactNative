@@ -171,7 +171,7 @@ export const DialogPaymentOrder = (props: DialogPaymentOrder) => {
                             value={ToTalPriceScreen.toString()}
                             placeholder={'Số Tiền Nhận'}
                             onChangeText={onTextChange}
-                            style={{ height: hp(7), width: '100%', backgroundColor: 'white', fontSize: hp(2), fontFamily: Fonts.Roboto_Slab_Regular, }}
+                            style={{ height: hp(7), width: '100%',  paddingVertical: 0, backgroundColor: 'white', fontSize: hp(2), fontFamily: Fonts.Roboto_Slab_Regular, }}
                         />
                     </View>
                     <View style={{ height: hp(8), width: '95%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'white', padding: 5, elevation: 2, marginBottom: 5, marginTop: 5 }}>

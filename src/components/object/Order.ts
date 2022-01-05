@@ -153,4 +153,52 @@ export interface ReservationList {
     isActive?: boolean
 }
 
-
+export interface CustomerList {
+    ObjectAddress: string;
+    ObjectID: string;
+    ShipAddress: string;
+    ObjectName: string;
+    ObjectPhone: string;
+    PaymentMethodID: number;
+    PaymentTermNumber: string;
+    Notes: string;
+    ObjectCode: string
+}
+export interface Customer {
+    CustomerID: string,
+    Code: string,
+    FullName: string,
+    CellPhone: string,
+    CityID: string,
+    DistrictID: string,
+    WardID: string,
+    TaxCode: string,
+    TaxCompanyName: string,
+    TaxCompanyAddress: string,
+    TaxEmail: string,
+    ShortAddress: string,
+    Gender: number
+}
+export interface CityList {
+    CityID: string;
+    CityName: string;
+    CountryID: string
+}
+export interface DistrictList {
+    DistrictID: string,
+    DistrictName: string,
+    CityID: string
+}
+export interface WardList {
+    WardID: string,
+    WardName: string,
+    DistrictID: string
+}
+export interface PrinterList {
+    ID: number,
+    NamePrinter: string,
+    IpAdress: string,
+    Port: string,
+    SizePaper: string,
+    isActive: boolean
+}

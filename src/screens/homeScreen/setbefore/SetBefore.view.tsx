@@ -56,6 +56,7 @@ const SetBefore = (props: any) => {
   const [IndexItem, setIndexItem] = useState(0)
   const [dataSearchString, setdataSearchString] = useState(Array<ReservationList>())
   const { dataReservation, GetReservation_Logic, setdataReservation } = SetBeforeLogic(props)
+  const [DataReservationScreen, setDataReservationScreen] = useState(Array<ReservationList>())
   const GetDateTime = () => {
     var today = new Date();
     setFromDateScreen(getDataByThing.getDayMonthYearString(today))
@@ -91,6 +92,11 @@ const SetBefore = (props: any) => {
   useEffect(() => {
     ViewData()
   },
+    [DataReservationScreen])
+  useEffect(() => {
+
+    setDataReservationScreen(dataReservation)
+  },
     [dataReservation])
   const onGetReservation = async () => {
     setIndexItem(0)
@@ -98,35 +104,29 @@ const SetBefore = (props: any) => {
     }
   }
   const onPressItem = (index: any) => {
-    for (var i = 0; i < dataReservation.length; i++) {
+    for (var i = 0; i < DataReservationScreen.length; i++) {
       if (i == index) {
-        dataReservation[i].isActive = !dataReservation[i].isActive;
-        setdataReservation([...dataReservation])
+        DataReservationScreen[i].isActive = !DataReservationScreen[i].isActive;
+        setDataReservationScreen([...DataReservationScreen])
       }
       else {
-        dataReservation[i].isActive = false;
-        setdataReservation([...dataReservation])
+        DataReservationScreen[i].isActive = false;
+        setDataReservationScreen([...DataReservationScreen])
       }
     }
   }
   const onChangText = (text) => {
+    setSearchString(text)
     if (!!text) {
-      text = getDataByThing.removeAccents(text.toString()).toLowerCase();
-      let result = dataReservation.filter(item => {
-        let result1 =
-          getDataByThing.removeAccents(item.SearchString).indexOf(text) > -1;
-        return result1;
+      let data = dataReservation;
+      let result = data.filter(item => {
+        let a = getDataByThing.removeAccents(item.SearchString).indexOf(text) > -1;
+        return a;
       })
-      try {
-        setdataSearchString(result)
-      } catch (error) {
-        console.log(error)
-      }
-
-      console.log(result)
+      setDataReservationScreen(result)
     }
     else {
-      setdataSearchString([])
+      setDataReservationScreen(dataReservation)
     }
   }
   const ViewHeader = () => {
@@ -152,45 +152,12 @@ const SetBefore = (props: any) => {
             </TouchableOpacity>
           </View>
           <TextInput
-            style={{ height: 42, width: wp(60), backgroundColor: 'white', fontSize: hp(2), color: 'black' }}
+            style={{ height: 42, paddingVertical: 0, width: wp(60), backgroundColor: 'white', fontSize: 12, color: 'black', padding: 0 }}
             mode='outlined'
-            // label={'SDT, Tên Khách Hàng'}
             placeholder={'SDT, Tên Khách Hàng'}
             value={SearchString}
-            onChangeText={(value) => { setSearchString(value) }}
+            onChangeText={(value) => { onChangText(value) }}
           ></TextInput>
-          {/* <Autocomplete
-            autoCapitalize="none"
-            autoCorrect={false}
-            data={dataSearchString}
-            defaultValue={SearchString}
-            onChangeText={(text) => { onChangText(text) }}
-            placeholder={"Tìm Kiếm SDT,Tên"}
-            listStyle={{ maxHeight: 320, width: '100%' }}
-            containerStyle={{
-              backgroundColor: 'white',
-              borderRadius: 2,
-            }}
-            style={{
-              height: 40,
-              width: wp(60),
-              color: 'black',
-              fontSize: 15,
-              fontFamily: Fonts.Roboto_Slab_Regular,
-            }}
-            keyExtractor={item => item.ReservationID}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => {
-                }}>
-                <Text style={{ fontSize: 15, color: 'black' }}>
-                  {item.SearchString}
-                </Text>
-              </TouchableOpacity> 
-            )}
-          >
-
-          </Autocomplete> */}
         </View>
         <View style={{
           height: '100%', width: wp(30),
@@ -249,7 +216,7 @@ const SetBefore = (props: any) => {
     return (
       <View style={{ width: '100%', height: hp(60) }}>
         <FlatList
-          data={dataReservation}
+          data={DataReservationScreen}
           renderItem={({ item, index }) =>
             <ItemSetBeforeCustom
               CustomerName={item.CustomerName}
@@ -335,7 +302,7 @@ const SetBefore = (props: any) => {
           style={{ justifyContent: 'flex-end', margin: 0 }}
           onDismiss={() => { setVisbleUpdateReservation(false) }} >
           <DialogUpdateReservation
-            ReservationSend={dataReservation[IndexItem]}
+            ReservationSend={DataReservationScreen[IndexItem]}
             onPressClose={() => { setVisbleUpdateReservation(false) }}
             onPressOK={() => {
               setVisbleUpdateReservation(false)
@@ -351,7 +318,7 @@ const SetBefore = (props: any) => {
           style={{ justifyContent: 'flex-end', margin: 0 }}
           onDismiss={() => { setVisbleCancelReservation(false) }} >
           <DialogCancelCheckIn
-            ReservationID={!lodash.isEmpty(dataReservation) ? dataReservation[IndexItem].ReservationID : ''}
+            ReservationID={!lodash.isEmpty(DataReservationScreen) ? DataReservationScreen[IndexItem].ReservationID : ''}
             onPressClose={() => { setVisbleCancelReservation(false) }}
             onPressOK={() => {
               setVisbleCancelReservation(false)

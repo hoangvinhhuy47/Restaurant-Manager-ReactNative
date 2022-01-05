@@ -25,78 +25,90 @@ import { IconDetailCustom } from '../iconsCustom/IconDetailCustom';
 import getDataByThing from '../../utils/getDataByThing';
 import DatePicker from 'react-native-date-picker'
 import moment from 'moment';
-import { SetBeforeLogic } from '../../screens/homeScreen/setbefore/SetBeforeLogic';
+import { DetailDesk_Logic } from '../../screens/homeScreen/detailDesk/DetailDeskLogic';
 import Toast from 'react-native-toast-message';
-interface DialogCancelCheckIn {
+
+interface DialogAddServiceCharge {
     onPressClose: any;
     onPressOK: any;
-    ReservationID: string;
+    OrderID: string
 }
-
-export const DialogCancelCheckIn = (props: DialogCancelCheckIn) => {
-    const { onPressClose, onPressOK, ReservationID } = props;
-    const [Reason, setReason] = useState('')
-    const { AddReservation_Logic, CancelCheckIn_Logic } = SetBeforeLogic(props)
+export const DialogAddServiceCharge = (props: DialogAddServiceCharge) => {
+    const { onPressClose, onPressOK, OrderID } = props;
+    const [Price, setPrice] = useState('0')
+    const { AddOtherFood_Logic, AddServiceCharge_Logic } = DetailDesk_Logic(props)
     useEffect(() => {
+
         return () => { };
     }, []);
-    const onCancelCheckIn = async () => {
-        if (!!Reason) {
-            if (await CancelCheckIn_Logic(ReservationID, Reason)) {
-                onPressOK()
-            }
-            else {
-                Toast.show({
-                    type: 'error',
-                    text1: 'Thông báo',
-                    text2: 'Không Thành Công'
-                });
-
-            }
+    const onAddOtherFood = async () => {
+        if (await AddServiceCharge_Logic(OrderID, Price)) {
+            onPressOK()
         }
         else {
             Toast.show({
                 type: 'error',
                 text1: 'Thông báo',
-                text2: 'Vui Lòng Nhập Lí Do từ Chối'
+                text2: 'Không Thành Công'
             });
-
         }
     }
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
             <View style={styles.container}>
-           
+                <Toast position='top' autoHide={true} topOffset={0} />
                 <View style={styles.containerItem}>
                     <View style={[styles.headerView]}>
-                        <Text style={styles.headerTitle}>Hủy Đặt Trước</Text>
+                        <Text style={styles.headerTitle}>Phí Dịch Vụ</Text>
                         <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', height: 25, width: 25 }} onPress={() => { onPressClose() }}>
                             <Image style={{ height: 25, width: 25 }} source={TurnDowwn} ></Image>
                         </TouchableOpacity>
                     </View>
-                    <View style={{ width: '100%', height: hp(22), alignItems: 'flex-start', padding: 10, flexDirection: 'column' }}>
-                        <Text style={{ fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(2), color: mainColors.blackColor }}>Nhập lí do hủy(✳)</Text>
+                    <View style={{ width: '100%', height: hp(15), alignItems: 'flex-start', padding: 2, flexDirection: 'column', backgroundColor: 'white', elevation: 2 }}>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(1.8), color: '#050571' }}>Giá Tiền</Text>
+                            <Text style={{ fontFamily: Fonts.Roboto_Slab_Regular, fontSize: hp(1.8), color: '#A20101' }}>*</Text>
+                        </View>
                         <TextInput
-                            style={{ height: hp(15),  paddingVertical: 0, width: '100%', fontSize: hp(2.2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
+                            style={{ height: hp(7), width: '100%', fontSize: hp(2), paddingVertical: 0, fontFamily: Fonts.Roboto_Slab_Regular, color: 'black', backgroundColor: 'white' }}
                             mode='outlined'
-                            onChangeText={(value) => { !!value ? setReason(value) : {} }}
-                            placeholder='Ghi Chú'
-                            value={Reason}
+                            keyboardType={'number-pad'}
+                            onFocus={() => { }}
+                            onBlur={() => { Price == '' ? setPrice('0') : {} }}
+                            onChangeText={(value) => {
+                                let newText = '';
+                                let numbers = '0123456789';
+                                if (!!value) {
+                                    for (var i = 0; i < value.length; i++) {
+                                        if (numbers.indexOf(value[i]) > -1) {
+                                            newText = newText + value[i];
+                                        }
+                                    }
+                                    setPrice(newText)
+
+                                }
+                                else {
+                                    setPrice(value)
+                                }
+                            }}
+                            placeholder='Giá Tiền'
+                            value={Price != '' ? getDataByThing.getcurrency(Price) : ''}
                         ></TextInput>
                     </View>
-                    <View style={styles.viewBottomButton}>
+                    <View style={{ height: hp(8), width: '100%', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around' }}>
                         <TouchableOpacity
-                            style={[styles.button, { borderColor: 'white' },
-                            Platform.OS == 'ios' ? styles.shadowIos : styles.shadowAndroid,
-                            ]}
-                            onPress={() => { onCancelCheckIn() }}>
-                            <Text style={styles.textButton}>Xác Nhận</Text>
+                            onPress={() => { onPressClose() }}
+                            style={{ alignItems: 'center', marginRight: 5, justifyContent: 'center', height: hp(5), width: '35%', elevation: 2, backgroundColor: mainColors.smokecolor, borderRadius: 5 }}>
+                            <Text style={{ fontSize: hp(1.8), fontFamily: Fonts.Roboto_Slab_Regular, color: mainColors.blackColor }}>Đóng</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => { onAddOtherFood() }}
+                            style={{ alignItems: 'center', marginRight: 5, justifyContent: 'center', height: hp(5), width: '35%', elevation: 2, backgroundColor: mainColors.greenscolor, borderRadius: 5 }}>
+                            <Text style={{ fontSize: hp(1.8), fontFamily: Fonts.Roboto_Slab_Regular, color: mainColors.whiteColor }}>Xác Nhận</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-                <Toast position='top' autoHide={true} topOffset={0} />
             </View >
-          
         </TouchableWithoutFeedback >
     );
 };
@@ -112,7 +124,7 @@ const styles = StyleSheet.create({
     containerItem: {
         backgroundColor: '#FFF',
         borderRadius: 2,
-        height: hp(40),
+        height: hp(30),
         width: '100%',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -153,14 +165,13 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        backgroundColor: 'white',
+        backgroundColor: '#ffff',
         marginBottom: 3,
-        width: wp(50),
+        width: wp(65),
         height: hp(6),
         justifyContent: 'center',
         alignItems: 'center',
-        elevation: 1,
-        borderRadius: 15
+        borderWidth: 0.5,
     },
     shadowAndroid: {
         elevation: 5,

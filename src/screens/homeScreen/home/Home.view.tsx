@@ -405,7 +405,8 @@ const styles = StyleSheet.create({
   container_child3_itemdesk: {
     width: '100%',
     height: hp(72),
-    margin: 5,
+    marginTop: 5,
+    paddingBottom: 15,
     alignItems: 'center',
 
   },

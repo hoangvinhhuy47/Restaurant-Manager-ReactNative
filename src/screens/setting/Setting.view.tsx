@@ -18,6 +18,8 @@ import {
   LOGOUTICON,
   CAIDAT,
   ICONRIGHT,
+  Printer,
+  PrinterSetting,
 
 } from '../../assets/index';
 import {
@@ -31,12 +33,14 @@ import TouchID from 'react-native-touch-id'
 import { mainColors } from '../../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { DialogErrorOkAndClose } from '../../components/modal/DialogErrorOkAndClose';
+import { ViewPrinter } from './Printer.View';
 const Setting = (props: any) => {
   const [version, setVersion] = useState('');
   const [isSwitchOn, setIsSwitchOn] = React.useState(false);
   const dispatch = useDispatch();
   const [CheckDevice, SetCheckDevice] = useState(1)
   const [VisbleDialogError, setVisbleDialogError] = useState(false);
+  const [VisiblePrinter, setVisiblePrinter] = useState(false)
   const { isFinger } = useSelector(
     (state: any) => ({
       isFinger: state.auth.isFinger
@@ -252,6 +256,18 @@ const Setting = (props: any) => {
                   <Text style={styles.textButton}>Thay đổi cấu hình</Text>
                   <Image style={styles.ImageBT2} source={ICONRIGHT} />
                 </Ripple>
+                <Ripple
+                  onPress={() => { setVisiblePrinter(true) }}
+                  style={[
+                    styles.backgroudButton,
+                    Platform.OS == 'ios'
+                      ? styles.shadowIos
+                      : styles.shadowAndroid,
+                  ]}>
+                  <Image style={styles.ImageBT} source={PrinterSetting} />
+                  <Text style={styles.textButton}>Cài Đặt Máy In</Text>
+                  <Image style={styles.ImageBT2} source={ICONRIGHT} />
+                </Ripple>
               </View>
             </View>
           </ScrollView>
@@ -274,6 +290,18 @@ const Setting = (props: any) => {
           style={{ justifyContent: 'flex-end', margin: 0 }}
         >
           <DialogErrorOkAndClose onPressOK={() => { OkDialogError() }} onPressClose={() => closeDialogError()} title='Thông báo' content='Dữ liệu của bạn sẽ bị xóa! Bạn muốn tiếp tục?' colorHeader='#ff5757'></DialogErrorOkAndClose>
+        </Modal>
+        <Modal
+          animationType='slide'
+          transparent
+          visible={VisiblePrinter}
+          presentationStyle='formSheet'
+          style={{ justifyContent: 'flex-end', margin: 0 }}
+          onDismiss={() => { setVisiblePrinter(false) }} >
+          <ViewPrinter
+            onShow={() => { setVisiblePrinter(false) }}
+            onSucessfull={() => { setVisiblePrinter(false) }}
+          ></ViewPrinter>
         </Modal>
       </SafeAreaView>
     </BackgroundBigScreen>

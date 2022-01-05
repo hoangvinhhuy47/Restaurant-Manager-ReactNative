@@ -169,7 +169,7 @@ export const DialogCommentFood = (props: DialogCommentFood) => {
                                             placeholder={'Nhập Ghi Chú'}
                                             mode={'outlined'}
                                             onChangeText={onTextChange}
-                                            style={{ height: hp(10), width: '95%', fontSize: hp(2), fontFamily: Fonts.Roboto_Slab_Regular, backgroundColor: 'white' }}
+                                            style={{ height: hp(10), width: '95%',  paddingVertical: 0, fontSize: hp(2), fontFamily: Fonts.Roboto_Slab_Regular, backgroundColor: 'white' }}
                                         />
                                     </View>}
 

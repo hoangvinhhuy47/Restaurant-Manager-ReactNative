@@ -14,18 +14,13 @@ import {
     KeyboardAvoidingView,
     TouchableOpacity,
 } from 'react-native';
-
-
 import React, { useState, useEffect } from 'react';
 import { DisCount, SendToSingeFood, TakeFoodAway, CancelTakeAway, WarringIC, Note, Delete, TurnDowwn, Clock } from '../../assets/index';
-
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Fonts, mainColors } from '../../constants';
-
-
 import { DialogDiscountDetaill_Food } from './DialogDiscountDetaill_Food';
 import { DialogCommentFood } from './DialogCommentFood';
 import { DetailDesk_Logic } from '../../screens/homeScreen/detailDesk/DetailDeskLogic'
@@ -78,7 +73,7 @@ export const DialogDetail_Food = (props: DialogDetail_Food) => {
     const [Visible, setVisible] = useState(false)
     const [VisibleTimeAdd, setVisibleTimeAdd] = useState(false)
     const RemoveFood = async () => {
-        if (Status == 1 || Status == 2) {
+        if (Status == 1 || Status == 2 || Status == 5) {
             if (await onRemoveFood_Logic(OrderID, OrderDetailID)) {
                 onSucessfull()
             }
@@ -161,7 +156,7 @@ export const DialogDetail_Food = (props: DialogDetail_Food) => {
             backgroundColor: 'rgba(0,0,0,0.5)',
         }}>
             <View style={styles.container}>
-    
+
                 <View style={{
                     width: '100%', height: hp(6), alignItems: 'center', justifyContent: 'space-between', backgroundColor: mainColors.greenscolor, elevation: 5, borderTopLeftRadius: 5,
                     borderTopRightRadius: 5,
@@ -292,7 +287,7 @@ export const DialogDetail_Food = (props: DialogDetail_Food) => {
             </Modal>
             <Toast position='top' autoHide={true} topOffset={0} />
         </View>
-     
+
     </KeyboardAvoidingView >
 };
 const styles = StyleSheet.create({

@@ -14,23 +14,13 @@ import {
     KeyboardAvoidingView,
     TouchableOpacity,
 } from 'react-native';
-import Ripple from 'react-native-material-ripple';
-
 import React, { useState, useEffect } from 'react';
-import { DisCount, SendToSingeFood, TakeFoodAway, CancelTakeAway, WarringIC, Note, Delete } from '../../assets/index';
-import ModalDropdown from 'react-native-modal-dropdown';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Fonts, mainColors } from '../../constants';
-
 import lodash from 'lodash'
-import getDataByThing from '../../utils/getDataByThing';
-
-import { Checkbox, RadioButton } from 'react-native-paper';
-import { TextInputCustom } from '../userComponents';
-
 import { TableList, TableMergeList, Order, List } from '../object/Order'
 import { DetailDesk_Logic } from '../../screens/homeScreen/detailDesk/DetailDeskLogic'
 import Toast from 'react-native-toast-message';
@@ -49,7 +39,6 @@ export const DialogSplitTable = (props: DialogSplitTable) => {
     const MergerOrder = async () => {
         let OrderIDMer = '';
         for (var i = 0; i < ListText.length; i++) {
-
             OrderIDMer = OrderIDMer + ListText[i].Text + ';';
         }
         if (OrderIDMer != '') {

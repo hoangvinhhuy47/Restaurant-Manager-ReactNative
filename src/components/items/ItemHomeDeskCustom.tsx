@@ -40,7 +40,7 @@ export const ItemHomeDeskCustom = (props: ItemHomeDeskCustom) => {
                         Type == 4 ? [styles.container_BanHu, Platform.OS == 'ios' ? styles.shadowIos : styles.shadowAndroid] :
                             [styles.container_YCThanhToan, Platform.OS == 'ios' ? styles.shadowIos : styles.shadowAndroid]}></View>
                 {time != null ? <Text style={{ fontSize: hp(1.8), fontFamily: Fonts.Roboto_Stab_Bold, color: 'black', textAlign: 'center' }}> {getDataByThing.getDayMonthYearHourStringDetail(time)}</Text> : <View style={{ height: hp(2) }}></View>}
-                <Image source={Desk_Home} style={{ height: wp(15), width: wp(15), }}></Image>
+                <Image source={Desk_Home} style={{ height: wp(15), width: wp(15),resizeMode:'contain' }}></Image>
                 <Text style={{ fontSize: hp(2), fontFamily: Fonts.Roboto_Slab_Regular, color: 'black' }}>{text}</Text>
             </View>
         </TouchableOpacity >
@@ -51,14 +51,16 @@ const styles = StyleSheet.create({
     container: {
         margin: 5,
         height: wp(27),
-        width: wp(27),
+        width: wp(30),
         backgroundColor: mainColors.whiteColor,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'column',
         position: 'relative',
         zIndex: 0,
-        borderRadius: 2
+        borderRadius: 2,
+        borderColor: '#3D3878',
+        borderWidth: 0.5
     },
 
     container_dangoi: {
@@ -68,9 +70,8 @@ const styles = StyleSheet.create({
         width: wp(3.5),
         backgroundColor: 'red',
         borderRadius: 100,
-        bottom: wp(23),
-        left: wp(23),
-
+        bottom: wp(22),
+        left: wp(25),
         borderColor: 'white',
         borderWidth: 1,
 
@@ -82,8 +83,8 @@ const styles = StyleSheet.create({
         width: wp(3.5),
         backgroundColor: mainColors.yellow,
         borderRadius: 100,
-        bottom: wp(23),
-        left: wp(23),
+        bottom: wp(22),
+        left: wp(25),
 
         borderColor: 'white',
         borderWidth: 1,
@@ -95,8 +96,8 @@ const styles = StyleSheet.create({
         width: wp(3.5),
         backgroundColor: mainColors.whiteColor,
         borderRadius: 100,
-        bottom: wp(23),
-        left: wp(23),
+        bottom: wp(22),
+        left: wp(25),
 
         borderColor: mainColors.smokecolor,
         borderWidth: 1,
@@ -108,8 +109,8 @@ const styles = StyleSheet.create({
         width: wp(3.5),
         backgroundColor: mainColors.blue,
         borderRadius: 100,
-        bottom: wp(23),
-        left: wp(23),
+        bottom: wp(22),
+        left: wp(25),
 
         borderColor: 'white',
         borderWidth: 1,
@@ -121,8 +122,8 @@ const styles = StyleSheet.create({
         width: wp(3.5),
         backgroundColor: mainColors.smokecolor,
         borderRadius: 100,
-        bottom: wp(23),
-        left: wp(23),
+        bottom: wp(22),
+        left: wp(25),
 
         borderColor: 'white',
         borderWidth: 1,
